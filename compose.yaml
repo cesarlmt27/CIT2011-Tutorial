@@ -4,10 +4,12 @@ services:
     build:
       context: ./spark/
       dockerfile: Dockerfile
-    image: spark-server
     container_name: spark_driver
     tty: true
     restart: on-failure
+    ports:
+      - "8080:8080"
+    entrypoint: ../driver-entrypoint.sh
 
 
   client:
