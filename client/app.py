@@ -1,7 +1,8 @@
 from pyspark.sql import SparkSession
 
-logFile = "/app/test.txt"  # Should be some file on your system
 spark = SparkSession.builder.remote("sc://spark-driver").appName("app").getOrCreate()
+
+logFile = "/app/test.txt"  # Archivo en el servidor de Spark
 logData = spark.read.text(logFile).cache()
 
 numAs = logData.filter(logData.value.contains('a')).count()
