@@ -5,6 +5,8 @@ FROM ubuntu:jammy
 # Establece el directorio de trabajo en /app
 WORKDIR /app
 
+COPY . /app
+
 RUN apt update && \
     apt install -y python3 && \
     apt install -y wget && \
@@ -15,5 +17,8 @@ RUN tar -xvf spark-3.5.0-bin-hadoop3.tgz
 
 WORKDIR /app/spark-3.5.0-bin-hadoop3
 
-# ./sbin/start-connect-server.sh --packages org.apache.spark:spark-connect_2.12:3.5.0
-# ENTRYPOINT ["./sbin/start-connect-server.sh", "--packages", "org.apache.spark:spark-connect_2.12:3.5.0"]
+# Configuración environment variables: conf/spark-env.sh.template
+
+# ENTRYPOINT ["../entrypoint.sh"]
+
+# CMD ["tail", "-f", "/dev/null"]
