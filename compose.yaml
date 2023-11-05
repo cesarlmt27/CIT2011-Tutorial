@@ -1,0 +1,21 @@
+services:
+  # Master
+  spark-driver:
+    build:
+      context: ./spark/
+      dockerfile: Dockerfile
+    image: spark-server
+    container_name: spark_driver
+    tty: true
+    restart: on-failure
+
+
+  client:
+    build:
+      context: ./client/
+      dockerfile: Dockerfile
+    container_name: client
+    tty: true
+    restart: on-failure
+    volumes:
+      - './client:/app'
