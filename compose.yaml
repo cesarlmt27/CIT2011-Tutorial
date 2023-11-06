@@ -1,52 +1,24 @@
 services:
-  # Master
-  spark-driver:
-    build:
-      context: ./spark/driver/
-      dockerfile: Dockerfile
-    container_name: spark_driver
-    tty: true
-    restart: on-failure
-    ports:
-      - "8080:8080"
-      - "4040:4040"
-    entrypoint: ../entrypoint.sh
+ spark-master:
+  build:
+    context: ./app/
+    dockerfile_inline: |
+      FROM bitnami/spark:3.5.0
+      COPY . /opt/bitnami/spark/app/
+  command: bin/spark-class org.apache.spark.deploy.master.Master
+  ports:
+    - '8080:8080'
+    - '7077:7077'
+  environment:
+    - SPARK_MASTER_HOST=spark-master
 
 
-  # Slave
-  spark-worker1:
-    build:
-      context: ./spark/worker/
-      dockerfile: Dockerfile
-    tty: true
-    restart: on-failure
-    ports:
-      - "8081:8081"
-    depends_on:
-      - spark-driver
-    entrypoint: ../entrypoint.sh
-
-
-  # Slave
-  spark-worker2:
-    build:
-      context: ./spark/worker/
-      dockerfile: Dockerfile
-    tty: true
-    restart: on-failure
-    ports:
-      - "8082:8081"
-    depends_on:
-      - spark-driver
-    entrypoint: ../entrypoint.sh
-
-
-  client:
-    build:
-      context: ./client/
-      dockerfile: Dockerfile
-    container_name: client
-    tty: true
-    restart: on-failure
-    volumes:
-      - './client:/app'
+ spark-worker:
+  image: bitnami/spark:3.5.0
+  command: bin/spark-class org.apache.spark.deploy.worker.Worker spark://spark-master:7077
+  environment:
+    - SPARK_WORKER_CORES=2
+    - SPARK_WORKER_MEMORY=2g
+    - SPARK_MASTER_URL=spark://spark-master:7077
+  depends_on:
+   - spark-master
