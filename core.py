@@ -8,7 +8,7 @@ ROOT_PATH = sys.argv[1] if len(sys.argv) == 2 else config.ROOT_PATH
 
 # Formato:
 # {
-#  nombre: str, ext: str, hash: hex str, threat: bool  
+#  nombre: str, ext: str, hash: {md5: hex, sha1: hex, sha256: hex}, threat: bool  
 # }
 DATA_FILES = []
 mutex = threading.Lock()
