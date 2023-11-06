@@ -2,14 +2,43 @@ services:
   # Master
   spark-driver:
     build:
-      context: ./spark/
+      context: ./spark/driver/
       dockerfile: Dockerfile
     container_name: spark_driver
     tty: true
     restart: on-failure
     ports:
       - "8080:8080"
-    entrypoint: ../driver-entrypoint.sh
+      - "4040:4040"
+    entrypoint: ../entrypoint.sh
+
+
+  # Slave
+  spark-worker1:
+    build:
+      context: ./spark/worker/
+      dockerfile: Dockerfile
+    tty: true
+    restart: on-failure
+    ports:
+      - "8081:8081"
+    depends_on:
+      - spark-driver
+    entrypoint: ../entrypoint.sh
+
+
+  # Slave
+  spark-worker2:
+    build:
+      context: ./spark/worker/
+      dockerfile: Dockerfile
+    tty: true
+    restart: on-failure
+    ports:
+      - "8082:8081"
+    depends_on:
+      - spark-driver
+    entrypoint: ../entrypoint.sh
 
 
   client:
