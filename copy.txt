@@ -1,0 +1,16 @@
+#### COPIAR ARCHIVOS AL CONTENEDOR
+
+docker cp -L C:\Users\Admin\Desktop\SD\config.py sd-spark-master-1:/opt/bitnami/spark/config.py
+docker cp -L C:\Users\Admin\Desktop\SD\core.py sd-spark-master-1:/opt/bitnami/spark/core.py
+docker cp -L C:\Users\Admin\Desktop\SD\digest.py sd-spark-master-1:/opt/bitnami/spark/digest.py
+docker cp -L C:\Users\Admin\Desktop\SD\checkThreat.py sd-spark-master-1:/opt/bitnami/spark/checkThreat.py
+docker cp -L C:\Users\Admin\Desktop\SD\source.txt sd-spark-master-1:/opt/bitnami/spark/source.txt
+
+#### OBTENER IP DEL SPARK MASTER
+
+docker logs sd-spark-master-1
+
+#### ENVIAR EJECUCION DEL ARCHIVO, EN ESTE CASO es core.py
+#### Si se quiere cambiar la ruta se debe cambiar en config.py 
+
+docker-compose exec spark-master spark-submit --master spark://172.20.0.2:7077 core.py 
